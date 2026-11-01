@@ -1,3 +1,4 @@
+import Home from './Areapublica/Home.jsx'
 import { useState } from 'react'
 import Sidebar from './components/Sidebar.jsx'
 import Topbar from './components/Topbar.jsx'
@@ -23,7 +24,8 @@ export default function App() {
 
   // --- Estado do modal de novo agendamento ---
   const [modalAgendamentoAberto, setModalAgendamentoAberto] = useState(false)
-
+  const [mostrarLogin, setMostrarLogin] = useState(false);
+  
   function irParaPagina(nome) {
     setPagina(nome)
   }
@@ -34,8 +36,11 @@ export default function App() {
   }
 
   if (!logado) {
-    return <Login onLogin={() => setLogado(true)} />
+  if (!mostrarLogin) {
+    return <Home onEntrar={() => setMostrarLogin(true)} />
   }
+  return <Login onLogin={() => setLogado(true)} />
+}
 
   function renderPagina() {
     switch (pagina) {
