@@ -1,5 +1,6 @@
 import Home from './Areapublica/Home.jsx'
 import { useState } from 'react'
+import { LogOut } from 'lucide-react'
 import Sidebar from './components/Sidebar.jsx'
 import Topbar from './components/Topbar.jsx'
 import NovoAgendamentoModal from './components/NovoAgendamentoModal.jsx'
@@ -11,6 +12,24 @@ import Prontuario from './pages/Prontuario.jsx'
 import Financeiro from './pages/Financeiro.jsx'
 import Relatorios from './pages/Relatorios.jsx'
 import Configuracoes from './pages/Configuracoes.jsx'
+
+// Botão "Sair" do painel: fica fixo no canto inferior esquerdo, embaixo do menu lateral.
+const estiloBotaoSair = {
+  position: 'fixed',
+  left: 12,
+  bottom: 16,
+  zIndex: 20,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  padding: '10px 14px',
+  border: '1px solid var(--border)',
+  borderRadius: 8,
+  background: 'transparent',
+  color: 'var(--text-muted)',
+  font: 'inherit',
+  cursor: 'pointer',
+}
 
 export default function App() {
   // --- Autenticação (simples, só controla se mostra Login ou o app) ---
@@ -25,7 +44,7 @@ export default function App() {
   // --- Estado do modal de novo agendamento ---
   const [modalAgendamentoAberto, setModalAgendamentoAberto] = useState(false)
   const [mostrarLogin, setMostrarLogin] = useState(false);
-  
+
   function irParaPagina(nome) {
     setPagina(nome)
   }
@@ -33,6 +52,15 @@ export default function App() {
   function abrirProntuario(paciente) {
     setPacienteSelecionado(paciente)
     setPagina('prontuario')
+  }
+
+  // Sai do painel e volta para a página inicial da área pública
+  function sair() {
+    setLogado(false)
+    setMostrarLogin(false)
+    setPagina('dashboard')
+    setPacienteSelecionado(null)
+    setModalAgendamentoAberto(false)
   }
 
   if (!logado) {
@@ -51,7 +79,13 @@ export default function App() {
       case 'pacientes':
         return <Pacientes onAbrirPaciente={abrirProntuario} />
       case 'prontuario':
-        return <Prontuario paciente={pacienteSelecionado} onVoltar={() => setPagina('pacientes')} />
+        return (
+          <Prontuario
+            paciente={pacienteSelecionado}
+            onVoltar={() => setPagina('pacientes')}
+            onTrocarPaciente={setPacienteSelecionado}
+          />
+        )
       case 'financeiro':
         return <Financeiro />
       case 'relatorios':
@@ -70,6 +104,10 @@ export default function App() {
         <Topbar />
         {renderPagina()}
       </div>
+
+      <button type="button" style={estiloBotaoSair} onClick={sair}>
+        <LogOut size={18} /> Sair
+      </button>
 
       {modalAgendamentoAberto && (
         <NovoAgendamentoModal onClose={() => setModalAgendamentoAberto(false)} />

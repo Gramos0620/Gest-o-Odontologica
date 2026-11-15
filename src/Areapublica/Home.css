@@ -286,6 +286,37 @@
   color: var(--pub-erro);
 }
 
+/* Formulário: títulos de grupo, erros e dicas */
+.pub-grupo {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--pub-borda);
+  color: var(--pub-destaque);
+  font-size: 16px;
+}
+
+.pub-grupo:first-child {
+  margin-top: 0;
+}
+
+.pub-erro {
+  margin: 0;
+  color: var(--pub-erro);
+  font-size: 13px;
+}
+
+.pub-dica {
+  margin: 0;
+  color: var(--pub-suave);
+  font-size: 12px;
+}
+
+.pub-campo input[aria-invalid='true'],
+.pub-campo select[aria-invalid='true'] {
+  border-color: var(--pub-erro);
+}
+
 /* Rodapé */
 .pub-rodape {
   padding: 20px 5vw;
