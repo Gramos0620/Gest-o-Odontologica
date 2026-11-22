@@ -146,6 +146,20 @@ export async function buscarCep(cep) {
   }
 }
 
+// Procura um cliente já cadastrado (virou paciente quando o profissional confirmou
+// um agendamento). Confere CPF + data de nascimento para não expor dados de outra pessoa.
+// Devolve os dados do cadastro, ou null se não encontrar.
+export async function buscarCliente(cpf, nascimento) {
+  await esperar(400)
+  const cpfDigitos = soDigitos(cpf)
+  if (cpfDigitos.length !== 11 || !nascimento) return null
+
+  const paciente = listarPacientesPublicos().find(
+    (p) => soDigitos(p.cpf) === cpfDigitos && p.nascimentoISO === nascimento
+  )
+  return paciente || null
+}
+
 export async function enviarAgendamento(dados) {
   await esperar(600)
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Agendamento from './Agendamento'
 import { SERVICOS } from './servicos'
 import './Home.css'
@@ -8,10 +8,16 @@ import './Home.css'
 // Props: onEntrar() abre o login do profissional (usado pelo App.jsx).
 function Home({ onEntrar }) {
   const [pagina, setPagina] = useState('inicio') // 'inicio' | 'agendar'
+  const conteudoRef = useRef(null)
+
+  // Sempre que a página muda: volta ao topo e move o foco para o conteúdo
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    conteudoRef.current?.focus()
+  }, [pagina])
 
   function irPara(destino) {
     setPagina(destino)
-    window.scrollTo(0, 0)
   }
 
   return (
@@ -29,7 +35,7 @@ function Home({ onEntrar }) {
         </button>
       </header>
 
-      <main className="pub-conteudo">
+      <main className="pub-conteudo" ref={conteudoRef} tabIndex={-1}>
         {pagina === 'inicio' && (
           <>
             <section className="pub-hero">
